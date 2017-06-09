@@ -9,13 +9,13 @@
                 <page name="stock" string="Stock">
                     <group>
                         <group>
-                            <field name="default_stock_account_input_categ_id"
+                            <field name="property_stock_account_input_categ_id"
                                    domain="[('deprecated', '=', False),('company_id','=',id)]"/>
-                            <field name="default_stock_account_output_categ_id"
+                            <field name="property_stock_account_output_categ_id"
                                    domain="[('deprecated', '=', False),('company_id','=',id)]"/>
-                            <field name="default_stock_valuation_account_id"
+                            <field name="property_stock_valuation_account_id"
                                    domain="[('deprecated', '=', False),('company_id','=',id)]"/>
-                            <field name="default_stock_journal" domain="[('company_id','=',id)]"/>
+                            <field name="property_stock_journal" domain="[('company_id','=',id)]"/>
                         </group>
                     </group>
                 </page>

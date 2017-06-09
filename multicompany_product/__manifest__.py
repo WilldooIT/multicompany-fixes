@@ -12,7 +12,8 @@
     'depends': ['product', 'multicompany'],
     'data': [
         'views/product.xml',
-        'views/product_category.xml'
+        'views/product_category.xml',
+        'views/res_company_view.xml'
     ],
     'installable': True,
     'application': False,

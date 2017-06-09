@@ -9,11 +9,11 @@
     'description': "",
     'category': 'Creu Blanca',
     'website': 'http://www.creublanca.es',
-    'depends': ['multicompany_account', 'multicompany_stock'],
+    'depends': ['multicompany_account', 'multicompany_stock', 'stock_account'],
     'data': [
         'views/product.xml',
         'views/product_category.xml',
-        'views/res_company_view.xml'
+        'views/res_company_view.xml',
     ],
     'installable': True,
     'application': False,
