@@ -15,18 +15,14 @@ class ProductProperty(models.TransientModel):
         comodel_name='account.account',
         string="Income Account",
         domain=[('deprecated', '=', False)],
-        compute='get_properties',
-        readonly=False,
-        store=False,
+        compute='get_properties', inverse='set_property_account_income_id',
         help="This account will be used for invoices instead of the default one to value sales for the current product."
     )
     property_account_expense_id = fields.Many2one(
         comodel_name='account.account',
         string="Expense Account",
         domain=[('deprecated', '=', False)],
-        compute='get_properties',
-        readonly=False,
-        store=False,
+        compute='get_properties', inverse='set_property_account_expense_id',
         help="This account will be used for invoices instead of the default one to value expenses for the current product.")
 
     @api.one
@@ -35,8 +31,12 @@ class ProductProperty(models.TransientModel):
         self.property_account_income_id = self.get_property_value('property_account_income_id', object, properties)
         self.property_account_expense_id = self.get_property_value('property_account_expense_id', object, properties)
 
-    @api.model
-    def set_properties(self, object, properties=False):
-        super(ProductProperty, self).set_properties(object, properties)
-        self.set_property(object, 'property_account_income_id', self.property_account_income_id.id, properties)
-        self.set_property(object, 'property_account_expense_id', self.property_account_expense_id.id, properties)
+    @api.one
+    def set_property_account_income_id(self):
+        self.set_property_value(self.product_template_id, 'property_account_income_id',
+                                self.property_account_income_id)
+
+    @api.one
+    def set_property_account_expense_id(self):
+        self.set_property_value(self.product_template_id, 'property_account_expense_id',
+                                self.property_account_expense_id)

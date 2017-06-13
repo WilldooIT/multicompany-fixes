@@ -17,6 +17,12 @@
                                    domain="[('deprecated', '=', False),('company_id','=',id)]"/>
                             <field name="property_stock_journal" domain="[('company_id','=',id)]"/>
                         </group>
+                        <group>
+                            <field name="property_stock_account_input"
+                                   domain="[('deprecated', '=', False),('company_id','=',id)]"/>
+                            <field name="property_stock_account_output"
+                                   domain="[('deprecated', '=', False),('company_id','=',id)]"/>
+                        </group>
                     </group>
                 </page>
             </notebook>

@@ -14,14 +14,12 @@ class ProductProperty(models.TransientModel):
     asset_category_id = fields.Many2one(
         'account.asset.category',
         string='Asset Type',
-        compute='get_properties',
-        readonly=False,
+        compute='get_properties', inverse='set_asset_category_id',
         ondelete="restrict")
     deferred_revenue_category_id = fields.Many2one(
         'account.asset.category',
         string='Deferred Revenue Type',
-        compute='get_properties',
-        readonly=False,
+        compute='get_properties', inverse='set_deferred_revenue_category_id',
         ondelete="restrict")
 
     @api.one
@@ -30,8 +28,12 @@ class ProductProperty(models.TransientModel):
         self.asset_category_id = self.get_property_value('asset_category_id', object, properties)
         self.deferred_revenue_category_id = self.get_property_value('deferred_revenue_category_id', object, properties)
 
-    @api.model
-    def set_properties(self, object, properties=False):
-        super(ProductProperty, self).set_properties(object, properties)
-        self.set_property(object, 'asset_category_id', self.asset_category_id.id, properties)
-        self.set_property(object, 'deferred_revenue_category_id', self.deferred_revenue_category_id.id, properties)
+    @api.one
+    def set_asset_category_id(self):
+        self.set_property_value(self.product_template_id, 'asset_category_id',
+                                self.asset_category_id)
+
+    @api.one
+    def set_deferred_revenue_category_id(self):
+        self.set_property_value(self.product_template_id, 'deferred_revenue_category_id',
+                                self.deferred_revenue_category_id)

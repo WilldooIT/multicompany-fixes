@@ -13,9 +13,7 @@ class ResPartnerProperty(models.TransientModel):
     property_delivery_carrier_id = fields.Many2one(
         'delivery.carrier',
         string="Delivery Method",
-        compute='get_properties',
-        readonly=False,
-        store=False,
+        compute='get_properties', inverse='set_property_delivery_carrier_id',
         help="This delivery method will be used when invoicing from picking.")
 
     @api.one
@@ -23,7 +21,6 @@ class ResPartnerProperty(models.TransientModel):
         super(ResPartnerProperty, self).get_property_fields(object, properties)
         self.property_delivery_carrier_id = self.get_property_value('property_delivery_carrier_id', object, properties)
 
-    @api.model
-    def set_properties(self, object, properties=False):
-        super(ResPartnerProperty, self).set_properties(object, properties)
-        self.set_property(object, 'property_delivery_carrier_id', self.property_delivery_carrier_id.id, properties)
+    @api.one
+    def set_property_delivery_carrier_id(self):
+        self.set_property_value(self.partner_id, 'property_delivery_carrier_id', self.property_delivery_carrier_id)

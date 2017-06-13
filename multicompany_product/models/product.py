@@ -10,17 +10,13 @@ class ProductTemplate(models.Model):
 
     property_ids = fields.One2many(
         comodel_name='product.template.property',
-        compute='_get_properties',
-        inverse='_set_properties',
+        compute='_get_properties', inverse='set_properties',
         string='Properties'
     )
 
     @api.multi
-    def _set_properties(self):
-        prop_obj = self.env['ir.property'].with_context(force_company=self.company_id.id)
-        for record in self:
-            for property in record.property_ids:
-                property.set_properties(record, prop_obj)
+    def set_properties(self):
+        return
 
     @api.multi
     def _get_properties(self):
@@ -54,8 +50,7 @@ class ProductProperty(models.TransientModel):
         groups="base.group_user",
         help="Cost of the product template used for standard stock valuation in accounting and used as a base price on purchase orders. "
              "Expressed in the default unit of measure of the product.",
-        compute='get_properties',
-        readonly=False)
+        compute='get_properties', inverse='set_standard_price')
 
     @api.one
     def get_properties(self):
@@ -66,6 +61,6 @@ class ProductProperty(models.TransientModel):
     def get_property_fields(self, object, properties):
         self.standard_price = self.get_property_value('standard_price', object, properties)
 
-    @api.model
-    def set_properties(self, object, properties=False):
-        self.set_property(object, 'standard_price', self.standard_price, properties)
+    @api.one
+    def set_standard_price(self):
+        self.set_property_value(self.product_template_id, 'standard_price', self.standard_price)

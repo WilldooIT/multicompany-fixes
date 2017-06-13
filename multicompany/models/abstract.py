@@ -26,7 +26,7 @@ class MulticomanyPropertyAbstract(models.AbstractModel):
     def set_properties(self, object, properties=False):
         raise MissingError('It must be redefined')
 
-    def set_property(self, object, fieldname, value):
+    def set_property_value(self, object, fieldname, value):
         self.env['ir.property'].with_context(force_company=self.company_id.id).set_multi(
             fieldname, object._name, {object.id: value}
         )
@@ -39,16 +39,4 @@ class MulticomanyPropertyAbstract(models.AbstractModel):
         properties.set_multi(fieldname, object._name, {object.id: value})
 
     def get_property_value(self, field, object, prop_obj):
-        value = prop_obj.get(field, object._name, (object._name + ',%s') % object.id)
-        if value:
-            if isinstance(value, list):
-                return value[0]
-            else:
-                return value
-        value = prop_obj.get(field, object._name)
-        if value:
-            if isinstance(value, list):
-                return value[0]
-            else:
-                return value
-        return False
+        return prop_obj.get_calculated(field, object._name, (object._name + ',%s') % object.id)

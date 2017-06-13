@@ -6,17 +6,13 @@ class ProductCategory(models.Model):
 
     property_ids = fields.One2many(
         comodel_name='product.category.property',
-        compute='_get_properties',
-        inverse='_set_properties',
+        compute='_get_properties', inverse='set_properties',
         string='Properties'
     )
 
     @api.multi
-    def _set_properties(self):
-        prop_obj = self.env['ir.property'].with_context(force_company=self.company_id.id)
-        for record in self:
-            for property in record.property_ids:
-                property.set_properties(record, prop_obj)
+    def set_properties(self):
+        return
 
     @api.multi
     def _get_properties(self):
@@ -50,6 +46,3 @@ class ProductCategoryProperty(models.TransientModel):
     def get_property_fields(self, object, properties):
         return
 
-    @api.model
-    def set_properties(self, object, properties=False):
-        return

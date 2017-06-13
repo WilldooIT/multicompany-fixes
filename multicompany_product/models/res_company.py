@@ -18,6 +18,4 @@ class ResCompany(models.Model):
 
     @api.one
     def set_property_product_pricelist(self):
-        self.set_default('property_product_pricelist', 'res.partner',
-                         self.property_product_pricelist.id,
-                         self.env['ir.property'].with_context(force_company=self.id))
+        self.set_default('property_product_pricelist', 'res.partner', self.property_product_pricelist.id)
