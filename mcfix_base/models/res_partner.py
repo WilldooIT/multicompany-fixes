@@ -11,7 +11,7 @@ class ResPartner(models.Model):
         res = []
         names = super(ResPartner, self).name_get()
         multicompany_group = self.env.ref('base.group_multi_company')
-        if multicompany_group not in self.env.user.groups_id:
+        if not self.env.context.get('show_res_company', True) or multicompany_group not in self.env.user.groups_id:
             return names
         for name in names:
             rec = self.browse(name[0])
@@ -19,6 +19,13 @@ class ResPartner(models.Model):
                 rec.company_id else name[1]
             res += [(rec.id, name)]
         return res
+
+    @api.depends('is_company', 'name', 'parent_id.name', 'type', 'company_name')
+    def _compute_display_name(self):
+        diff = dict(show_address=None, show_address_only=None, show_email=None, show_res_company=None)
+        names = dict(self.with_context(**diff).name_get())
+        for partner in self:
+            partner.display_name = names.get(partner.id)
 
     @api.one
     def _compute_current_company_id(self):
