@@ -21,15 +21,15 @@ class AccountConfigSettings(models.TransientModel):
             res += [(rec.id, name)]
         return res
 
-    @api.onchange('company_id')
-    def onchange_company_id(self):
-        self.chart_template_id = False
-        self.sale_tax_id = False
-        self.purchase_tax_id = False
-        self.transfer_account_id = False
-        self.currency_exchange_journal_id = False
-        self.default_sale_tax_id = False
-        self.default_purchase_tax_id = False
+#     @api.onchange('company_id')
+#     def onchange_company_id(self):
+#         self.chart_template_id = False
+#         self.sale_tax_id = False
+#         self.purchase_tax_id = False
+#         self.transfer_account_id = False
+#         self.currency_exchange_journal_id = False
+#         self.default_sale_tax_id = False
+#         self.default_purchase_tax_id = False
 
     @api.multi
     @api.constrains('chart_template_id', 'company_id')
