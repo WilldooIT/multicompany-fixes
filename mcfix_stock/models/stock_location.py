@@ -484,10 +484,18 @@ class StockLocation(models.Model):
                  ('company_id', '!=', False),
                  ('company_id', '!=', rec.company_id.id)], limit=1)
             if template:
-                raise ValidationError(
-                    _('You cannot change the company, as this '
-                      'Location is assigned to Product Template '
-                      '%s.' % template.name))
+                
+                # See github: https://github.com/odoo/odoo/commit/08425316d311d4569d5d5634248fc1fd18d6a7f5
+                # A strange piece of code, ignoring the location_id so let's do our own check!!
+                
+                for template in self.env['product.template'].search(
+                        [('company_id', '!=', False),
+                         ('company_id', '!=', rec.company_id.id)], limit=1):
+                    if template.location_id == rec:
+                        raise ValidationError(
+                            _('You cannot change the company, as this '
+                              'Location is assigned to Product Template '
+                              '%s.' % template.name))
             partner = self.env['res.partner'].search(
                 [('property_stock_customer', '=', rec.id),
                  ('company_id', '!=', False),
