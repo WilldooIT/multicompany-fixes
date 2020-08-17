@@ -57,7 +57,7 @@ class SaleOrder(models.Model):
 
         if self.team_id and self.team_id.company_id != self.company_id:
             self.team_id = False
-        if self.user_id and self.user_id.company_id != self.company_id:
+        if self.user_id and self.user_id.company_id != self.company_id and self.user_id.company_id not in self.user_id.company_ids:
             self.user_id = False
         if self.partner_id:
             self.fiscal_position_id = self.env['account.fiscal.position'].\
@@ -202,7 +202,8 @@ class SaleOrder(models.Model):
     def _check_sales_user_company(self):
         for rec in self:
             if (rec.user_id and rec.user_id.company_id and
-                    rec.user_id.company_id != rec.company_id):
+                    rec.user_id.company_id != rec.company_id and
+                    rec.company_id not in rec.user_id.company_ids):
                 raise ValidationError(_('Configuration error\n'
                                         'The Company of the salesperson '
                                         'must match with that of the '

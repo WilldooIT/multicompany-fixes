@@ -1,5 +1,45 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
+
+
+<function name="write" model="ir.model.data">
+    <function name="search" model="ir.model.data">
+        <value eval="[('module', '=', 'base'), ('name', '=', 'res_users_rule')]"/>
+    </function>
+    <value eval="{'noupdate': False}" />
+</function>
+
+<record id="base.res_users_rule" model="ir.rule">
+    <field name="domain_force">['|', ('company_ids','child_of',[user.company_id.id]), ('company_ids','in',user.company_id.id)]</field>
+</record>
+
+<function name="write" model="ir.model.data">
+    <function name="search" model="ir.model.data">
+        <value eval="[('module', '=', 'base'), ('name', '=', 'res_users_rule')]"/>
+    </function>
+    <value eval="{'noupdate': True}" />
+</function>
+
+
+<function name="write" model="ir.model.data">
+    <function name="search" model="ir.model.data">
+        <value eval="[('module', '=', 'base'), ('name', '=', 'res_partner_rule')]"/>
+    </function>
+    <value eval="{'noupdate': False}" />
+</function>
+
+<record id="base.res_partner_rule" model="ir.rule">
+    <field name="domain_force">['|','|',('company_id','child_of',[user.company_id.id]), ('company_id','=',False), ('user_ids.company_ids','in',user.company_id.id)]</field>
+</record>
+
+<function name="write" model="ir.model.data">
+    <function name="search" model="ir.model.data">
+        <value eval="[('module', '=', 'base'), ('name', '=', 'res_partner_rule')]"/>
+    </function>
+    <value eval="{'noupdate': True}" />
+</function>
+
+
     <record id="view_order_tree" model="ir.ui.view">
         <field name="name">sale.order.tree</field>
         <field name="model">sale.order</field>
@@ -36,7 +76,7 @@
                 <attribute name="domain">['|', ('company_id', '=', company_id), ('company_id', '=', False)]</attribute>
             </field>
             <field name="user_id" position="attributes">
-                <attribute name="domain">['|', ('company_id', '=', company_id), ('company_id', '=', False)]</attribute>
+                <attribute name="domain">['|', ('company_ids', 'in', company_id), ('company_id', '=', False)]</attribute>
             </field>
             <field name="fiscal_position_id" position="attributes">
                 <attribute name="domain">['|', ('company_id', '=', company_id), ('company_id', '=', False)]</attribute>
