@@ -29,7 +29,8 @@
 </function>
 
 <record id="base.res_partner_rule" model="ir.rule">
-    <field name="domain_force">['|','|',('company_id','child_of',[user.company_id.id]), ('company_id','=',False), ('user_ids.company_ids','in',user.company_id.id)]</field>
+<!--     <field name="domain_force">['|',('relevant_company_id','child_of',[user.company_id.id]), ('company_id','=',False)]</field>
+ -->    <field name="domain_force">['|',('relevant_company_id','child_of',[user.company_id.id]), ('company_id','=',False)]</field>
 </record>
 
 <function name="write" model="ir.model.data">
